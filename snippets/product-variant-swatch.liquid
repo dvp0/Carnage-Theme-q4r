@@ -1,0 +1,99 @@
+{% comment %}
+  Enhanced Color Swatch Variant Picker
+  Displays visual swatches for color/pattern variants
+{% endcomment %}
+
+{%- liquid
+  assign swatch_option = nil
+  for option in product.options_with_values
+    assign option_name = option.name | downcase
+    if option_name contains 'color' or option_name contains 'colour' or option_name contains 'pattern'
+      assign swatch_option = option
+      break
+    endif
+  endfor
+-%}
+
+{%- if swatch_option -%}
+  <div class="product-variant-swatches">
+    <fieldset class="variant-swatch-fieldset">
+      <legend class="variant-swatch-legend">{{ swatch_option.name }}</legend>
+
+      <div class="variant-swatch-grid">
+        {%- for value in swatch_option.values -%}
+          {%- liquid
+            assign color_name = value | handle
+            assign variant_available = false
+
+            for variant in product.variants
+              if variant.option1 == value or variant.option2 == value or variant.option3 == value
+                if variant.available
+                  assign variant_available = true
+                  break
+                endif
+              endif
+            endfor
+          -%}
+
+          <div class="swatch-item {% unless variant_available %}swatch-unavailable{% endunless %}">
+            <input
+              type="radio"
+              id="swatch-{{ section.id }}-{{ color_name }}"
+              name="{{ swatch_option.name }}"
+              value="{{ value | escape }}"
+              class="swatch-input"
+              {% unless variant_available %}disabled{% endunless %}
+            >
+            <label
+              for="swatch-{{ section.id }}-{{ color_name }}"
+              class="swatch-label"
+              title="{{ value }}"
+              {% unless variant_available %}disabled{% endunless %}
+            >
+              {%- liquid
+                assign swatch_image = images[color_name] | default: nil
+                assign color_code = settings.swatch_colors | split: ',' | where: 'handle', color_name | first
+
+                if swatch_image != nil
+                  echo '<img src="' | append: swatch_image | append: '" alt="' | append: value | append: '" class="swatch-image">'
+                elsif color_code
+                  echo '<span class="swatch-color" style="background-color: ' | append: color_code | append: '"></span>'
+                else
+                  case color_name
+                    when 'red'
+                      echo '<span class="swatch-color" style="background-color: #ff0000;"></span>'
+                    when 'blue'
+                      echo '<span class="swatch-color" style="background-color: #0000ff;"></span>'
+                    when 'green'
+                      echo '<span class="swatch-color" style="background-color: #00ff00;"></span>'
+                    when 'black'
+                      echo '<span class="swatch-color" style="background-color: #000000;"></span>'
+                    when 'white'
+                      echo '<span class="swatch-color" style="background-color: #ffffff; border: 1px solid #ddd;"></span>'
+                    when 'gray' or 'grey'
+                      echo '<span class="swatch-color" style="background-color: #808080;"></span>'
+                    when 'yellow'
+                      echo '<span class="swatch-color" style="background-color: #ffff00;"></span>'
+                    when 'pink'
+                      echo '<span class="swatch-color" style="background-color: #ffc0cb;"></span>'
+                    when 'purple'
+                      echo '<span class="swatch-color" style="background-color: #800080;"></span>'
+                    when 'orange'
+                      echo '<span class="swatch-color" style="background-color: #ffa500;"></span>'
+                    when 'brown'
+                      echo '<span class="swatch-color" style="background-color: #8b4513;"></span>'
+                    when 'navy'
+                      echo '<span class="swatch-color" style="background-color: #000080;"></span>'
+                    else
+                      echo '<span class="swatch-text">' | append: value | truncate: 2, '' | append: '</span>'
+                  endcase
+                endif
+              -%}
+              <span class="swatch-tooltip">{{ value }}</span>
+            </label>
+          </div>
+        {%- endfor -%}
+      </div>
+    </fieldset>
+  </div>
+{%- endif -%}

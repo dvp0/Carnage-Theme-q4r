@@ -1,0 +1,119 @@
+{
+  "sections": {
+    "main": {
+      "type": "enhanced-product",
+      "blocks": {
+        "vendor": {
+          "type": "vendor"
+        },
+        "title": {
+          "type": "title"
+        },
+        "price": {
+          "type": "price"
+        },
+        "stock_indicator": {
+          "type": "stock_indicator",
+          "settings": {
+            "low_stock_threshold": 10,
+            "show_exact_stock": false
+          }
+        },
+        "trust_badges": {
+          "type": "trust_badges",
+          "settings": {
+            "show_secure_checkout": true,
+            "show_free_shipping": true,
+            "free_shipping_text": "Free Shipping Over $50",
+            "show_returns": true,
+            "returns_text": "30-Day Returns",
+            "show_warranty": false,
+            "warranty_text": "1-Year Warranty"
+          }
+        },
+        "color_swatches": {
+          "type": "color_swatches"
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector"
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true
+          }
+        },
+        "product_highlights": {
+          "type": "product_highlights",
+          "settings": {
+            "heading": "Why You'll Love It",
+            "feature_1_heading": "Premium Quality",
+            "feature_1_text": "Crafted with the finest materials for lasting durability and exceptional performance",
+            "feature_1_icon": "check_mark",
+            "feature_2_heading": "Fast & Free Shipping",
+            "feature_2_text": "Quick delivery within 2-3 business days on all orders over $50",
+            "feature_2_icon": "truck",
+            "feature_3_heading": "Eco-Friendly",
+            "feature_3_text": "Sustainably sourced and environmentally conscious design",
+            "feature_3_icon": "recycle",
+            "feature_4_heading": "Customer Satisfaction",
+            "feature_4_text": "30-day money-back guarantee - we stand behind our products",
+            "feature_4_icon": "star"
+          }
+        },
+        "product_tabs": {
+          "type": "product_tabs",
+          "settings": {
+            "show_specifications": true,
+            "show_shipping_info": true,
+            "show_faq": true
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "price",
+        "stock_indicator",
+        "trust_badges",
+        "color_swatches",
+        "variant_picker",
+        "quantity_selector",
+        "buy_buttons",
+        "product_highlights",
+        "product_tabs"
+      ],
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "heading": "Complete Your Look",
+        "heading_size": "h2",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "color_scheme": "background-1",
+        "image_ratio": "square",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "columns_mobile": "2",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "related-products"
+  ]
+}

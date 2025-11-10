@@ -1,0 +1,502 @@
+{% comment %}
+  Enhanced Product Section
+  Includes swatches, tabs, highlights, trust badges, and stock indicators
+{% endcomment %}
+
+{{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+{{ 'product-enhancements.css' | asset_url | stylesheet_tag }}
+{{ 'component-accordion.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-rte.css' | asset_url | stylesheet_tag }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'product-enhancements.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  id="EnhancedProduct-{{ section.id }}"
+  class="page-width section-{{ section.id }}-padding"
+  data-section="{{ section.id }}"
+>
+  <div class="product product--medium grid grid--1-col grid--2-col-tablet">
+    {%- comment -%} Product Media Gallery {%- endcomment -%}
+    <div class="grid__item product__media-wrapper">
+      {% render 'product-media-gallery' %}
+    </div>
+
+    {%- comment -%} Product Info {%- endcomment -%}
+    <div class="product__info-wrapper grid__item">
+      <product-info
+        id="ProductInfo-{{ section.id }}"
+        data-section="{{ section.id }}"
+        data-url="{{ product.url }}"
+        class="product__info-container"
+      >
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+
+            {%- when 'vendor' -%}
+              <div class="product__vendor">
+                <p class="caption-with-letter-spacing">{{ product.vendor }}</p>
+              </div>
+
+            {%- when 'title' -%}
+              <div class="product__title" {{ block.shopify_attributes }}>
+                <h1>{{ product.title | escape }}</h1>
+              </div>
+
+            {%- when 'price' -%}
+              <div class="no-js-hidden" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
+                {%- render 'price',
+                  product: product,
+                  use_variant: true,
+                  show_badges: true,
+                  price_class: 'price--large'
+                -%}
+              </div>
+
+            {%- when 'stock_indicator' -%}
+              <div {{ block.shopify_attributes }}>
+                {%- render 'product-stock-indicator', block: block -%}
+              </div>
+
+            {%- when 'trust_badges' -%}
+              <div {{ block.shopify_attributes }}>
+                {%- render 'product-trust-badges', block: block -%}
+              </div>
+
+            {%- when 'color_swatches' -%}
+              <div {{ block.shopify_attributes }}>
+                {%- render 'product-variant-swatch' -%}
+              </div>
+
+            {%- when 'variant_picker' -%}
+              <div {{ block.shopify_attributes }}>
+                {%- render 'product-variant-picker', product: product, block: block -%}
+              </div>
+
+            {%- when 'quantity_selector' -%}
+              <div class="product-form__input product-form__quantity" {{ block.shopify_attributes }}>
+                {%- assign cart_qty = cart | item_count_for_variant: product.selected_or_first_available_variant.id -%}
+                <label class="quantity__label form__label" for="Quantity-{{ section.id }}">
+                  Quantity
+                </label>
+                <quantity-input class="quantity">
+                  <button class="quantity__button no-js-hidden" name="minus" type="button">
+                    <span class="visually-hidden">Decrease quantity</span>
+                    {% render 'icon-minus' %}
+                  </button>
+                  <input
+                    class="quantity__input"
+                    type="number"
+                    name="quantity"
+                    id="Quantity-{{ section.id }}"
+                    min="1"
+                    value="1"
+                  />
+                  <button class="quantity__button no-js-hidden" name="plus" type="button">
+                    <span class="visually-hidden">Increase quantity</span>
+                    {% render 'icon-plus' %}
+                  </button>
+                </quantity-input>
+              </div>
+
+            {%- when 'buy_buttons' -%}
+              <div {{ block.shopify_attributes }}>
+                {%- render 'buy-buttons',
+                  block: block,
+                  product: product,
+                  product_form_id: 'product-form-' | append: section.id,
+                  section_id: section.id,
+                  show_pickup_availability: true
+                -%}
+              </div>
+
+            {%- when 'product_highlights' -%}
+              <div {{ block.shopify_attributes }}>
+                {%- render 'product-highlights', block: block -%}
+              </div>
+
+            {%- when 'product_tabs' -%}
+              <div {{ block.shopify_attributes }}>
+                {%- render 'product-tabs', block: block -%}
+              </div>
+
+            {%- when 'description' -%}
+              {%- if product.description != blank -%}
+                <div class="product__description rte" {{ block.shopify_attributes }}>
+                  {{ product.description }}
+                </div>
+              {%- endif -%}
+
+          {%- endcase -%}
+        {%- endfor -%}
+
+      </product-info>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Enhanced Product",
+  "tag": "section",
+  "class": "section",
+  "blocks": [
+    {
+      "type": "vendor",
+      "name": "Vendor",
+      "limit": 1
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1
+    },
+    {
+      "type": "price",
+      "name": "Price",
+      "limit": 1
+    },
+    {
+      "type": "stock_indicator",
+      "name": "Stock Indicator",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "low_stock_threshold",
+          "min": 1,
+          "max": 50,
+          "step": 1,
+          "default": 10,
+          "label": "Low Stock Threshold"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_exact_stock",
+          "default": false,
+          "label": "Show Exact Stock Count"
+        }
+      ]
+    },
+    {
+      "type": "trust_badges",
+      "name": "Trust Badges",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_secure_checkout",
+          "default": true,
+          "label": "Show Secure Checkout"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_free_shipping",
+          "default": true,
+          "label": "Show Free Shipping"
+        },
+        {
+          "type": "text",
+          "id": "free_shipping_text",
+          "label": "Free Shipping Text",
+          "default": "Free Shipping"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_returns",
+          "default": true,
+          "label": "Show Easy Returns"
+        },
+        {
+          "type": "text",
+          "id": "returns_text",
+          "label": "Returns Text",
+          "default": "Easy Returns"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_warranty",
+          "default": false,
+          "label": "Show Warranty"
+        },
+        {
+          "type": "text",
+          "id": "warranty_text",
+          "label": "Warranty Text",
+          "default": "1-Year Warranty"
+        },
+        {
+          "type": "text",
+          "id": "custom_badge_1_text",
+          "label": "Custom Badge 1 Text"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_badge_1_icon",
+          "label": "Custom Badge 1 Icon"
+        },
+        {
+          "type": "text",
+          "id": "custom_badge_2_text",
+          "label": "Custom Badge 2 Text"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_badge_2_icon",
+          "label": "Custom Badge 2 Icon"
+        }
+      ]
+    },
+    {
+      "type": "color_swatches",
+      "name": "Color Swatches",
+      "limit": 1
+    },
+    {
+      "type": "variant_picker",
+      "name": "Variant Picker",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "picker_type",
+          "options": [
+            {
+              "value": "dropdown",
+              "label": "Dropdown"
+            },
+            {
+              "value": "button",
+              "label": "Buttons"
+            }
+          ],
+          "default": "button",
+          "label": "Type"
+        }
+      ]
+    },
+    {
+      "type": "quantity_selector",
+      "name": "Quantity Selector",
+      "limit": 1
+    },
+    {
+      "type": "buy_buttons",
+      "name": "Buy Buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_dynamic_checkout",
+          "default": true,
+          "label": "Show dynamic checkout buttons"
+        }
+      ]
+    },
+    {
+      "type": "product_highlights",
+      "name": "Product Highlights",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Key Features",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "feature_1_heading",
+          "default": "Premium Quality",
+          "label": "Feature 1 Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "feature_1_text",
+          "default": "Crafted with the finest materials for lasting durability",
+          "label": "Feature 1 Text"
+        },
+        {
+          "type": "select",
+          "id": "feature_1_icon",
+          "options": [
+            {"value": "none", "label": "None"},
+            {"value": "check_mark", "label": "Check Mark"},
+            {"value": "star", "label": "Star"},
+            {"value": "truck", "label": "Truck"}
+          ],
+          "default": "check_mark",
+          "label": "Feature 1 Icon"
+        },
+        {
+          "type": "text",
+          "id": "feature_2_heading",
+          "default": "Fast Shipping",
+          "label": "Feature 2 Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "feature_2_text",
+          "default": "Quick delivery within 2-3 business days",
+          "label": "Feature 2 Text"
+        },
+        {
+          "type": "select",
+          "id": "feature_2_icon",
+          "options": [
+            {"value": "none", "label": "None"},
+            {"value": "check_mark", "label": "Check Mark"},
+            {"value": "star", "label": "Star"},
+            {"value": "truck", "label": "Truck"}
+          ],
+          "default": "truck",
+          "label": "Feature 2 Icon"
+        },
+        {
+          "type": "text",
+          "id": "feature_3_heading",
+          "default": "Eco-Friendly",
+          "label": "Feature 3 Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "feature_3_text",
+          "default": "Sustainable and environmentally conscious design",
+          "label": "Feature 3 Text"
+        },
+        {
+          "type": "select",
+          "id": "feature_3_icon",
+          "options": [
+            {"value": "none", "label": "None"},
+            {"value": "check_mark", "label": "Check Mark"},
+            {"value": "star", "label": "Star"},
+            {"value": "recycle", "label": "Recycle"}
+          ],
+          "default": "recycle",
+          "label": "Feature 3 Icon"
+        },
+        {
+          "type": "text",
+          "id": "feature_4_heading",
+          "label": "Feature 4 Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "feature_4_text",
+          "label": "Feature 4 Text"
+        },
+        {
+          "type": "select",
+          "id": "feature_4_icon",
+          "options": [
+            {"value": "none", "label": "None"},
+            {"value": "check_mark", "label": "Check Mark"},
+            {"value": "star", "label": "Star"},
+            {"value": "truck", "label": "Truck"}
+          ],
+          "default": "none",
+          "label": "Feature 4 Icon"
+        }
+      ]
+    },
+    {
+      "type": "product_tabs",
+      "name": "Product Information Tabs",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_specifications",
+          "default": true,
+          "label": "Show Specifications Tab"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_shipping_info",
+          "default": true,
+          "label": "Show Shipping & Returns Tab"
+        },
+        {
+          "type": "richtext",
+          "id": "shipping_text",
+          "label": "Shipping Info Content"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_faq",
+          "default": true,
+          "label": "Show FAQ Tab"
+        },
+        {
+          "type": "richtext",
+          "id": "faq_text",
+          "label": "FAQ Content"
+        }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1
+    }
+  ],
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Enhanced Product",
+      "blocks": [
+        {"type": "vendor"},
+        {"type": "title"},
+        {"type": "price"},
+        {"type": "stock_indicator"},
+        {"type": "trust_badges"},
+        {"type": "color_swatches"},
+        {"type": "variant_picker"},
+        {"type": "quantity_selector"},
+        {"type": "buy_buttons"},
+        {"type": "product_highlights"},
+        {"type": "product_tabs"}
+      ]
+    }
+  ]
+}
+{% endschema %}

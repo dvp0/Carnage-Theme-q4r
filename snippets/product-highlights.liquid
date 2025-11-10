@@ -1,0 +1,76 @@
+{% comment %}
+  Product Highlights/Key Features
+  Displays key product features with icons
+{% endcomment %}
+
+<div class="product-highlights-wrapper">
+  {%- if block.settings.heading != blank -%}
+    <h3 class="product-highlights-heading">{{ block.settings.heading }}</h3>
+  {%- endif -%}
+
+  <div class="product-highlights-grid">
+    {%- if block.settings.feature_1_text != blank -%}
+      <div class="product-highlight-item">
+        {%- if block.settings.feature_1_icon != 'none' -%}
+          <div class="highlight-icon">
+            {%- render 'icon', icon: block.settings.feature_1_icon -%}
+          </div>
+        {%- endif -%}
+        <div class="highlight-content">
+          {%- if block.settings.feature_1_heading != blank -%}
+            <h4 class="highlight-heading">{{ block.settings.feature_1_heading }}</h4>
+          {%- endif -%}
+          <p class="highlight-text">{{ block.settings.feature_1_text }}</p>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if block.settings.feature_2_text != blank -%}
+      <div class="product-highlight-item">
+        {%- if block.settings.feature_2_icon != 'none' -%}
+          <div class="highlight-icon">
+            {%- render 'icon', icon: block.settings.feature_2_icon -%}
+          </div>
+        {%- endif -%}
+        <div class="highlight-content">
+          {%- if block.settings.feature_2_heading != blank -%}
+            <h4 class="highlight-heading">{{ block.settings.feature_2_heading }}</h4>
+          {%- endif -%}
+          <p class="highlight-text">{{ block.settings.feature_2_text }}</p>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if block.settings.feature_3_text != blank -%}
+      <div class="product-highlight-item">
+        {%- if block.settings.feature_3_icon != 'none' -%}
+          <div class="highlight-icon">
+            {%- render 'icon', icon: block.settings.feature_3_icon -%}
+          </div>
+        {%- endif -%}
+        <div class="highlight-content">
+          {%- if block.settings.feature_3_heading != blank -%}
+            <h4 class="highlight-heading">{{ block.settings.feature_3_heading }}</h4>
+          {%- endif -%}
+          <p class="highlight-text">{{ block.settings.feature_3_text }}</p>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if block.settings.feature_4_text != blank -%}
+      <div class="product-highlight-item">
+        {%- if block.settings.feature_4_icon != 'none' -%}
+          <div class="highlight-icon">
+            {%- render 'icon', icon: block.settings.feature_4_icon -%}
+          </div>
+        {%- endif -%}
+        <div class="highlight-content">
+          {%- if block.settings.feature_4_heading != blank -%}
+            <h4 class="highlight-heading">{{ block.settings.feature_4_heading }}</h4>
+          {%- endif -%}
+          <p class="highlight-text">{{ block.settings.feature_4_text }}</p>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
