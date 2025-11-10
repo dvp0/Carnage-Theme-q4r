@@ -1,6 +1,7 @@
 .cart {
   position: relative;
   display: block;
+  padding-top: 2rem;
 }
 
 .cart__empty-text,

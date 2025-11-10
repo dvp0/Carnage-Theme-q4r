@@ -2251,6 +2251,7 @@ product-info .loading-overlay:not(.hidden) ~ *,
 .shopify-section-header-sticky {
   position: sticky;
   top: 0;
+  z-index: 3;
 }
 
 .shopify-section-header-hidden {
@@ -3173,6 +3174,16 @@ div#Slide-template--18344549679389__8db33922-1583-4e52-bbaf-a8348518d3eb-2 {
 
 main#MainContent {
     overflow: hidden;
+}
+
+/* Ensure main content has proper spacing when header is sticky */
+.shopify-section-header-sticky ~ main#MainContent {
+    margin-top: 0;
+}
+
+/* For "always" sticky header, add padding to ensure content is not hidden */
+.shopify-section-header-sticky.shopify-section-group-header-group ~ main#MainContent {
+    padding-top: 0;
 }
 
 .facets-vertical.page-width {

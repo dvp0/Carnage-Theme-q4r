@@ -1,5 +1,6 @@
 .product {
   margin: 0;
+  padding-top: 2rem;
 }
 
 .product.grid {
@@ -19,7 +20,7 @@
   .product__column-sticky {
     display: block;
     position: sticky;
-    top: 3rem;
+    top: calc(var(--header-height, 10rem) + 3rem);
     z-index: 2;
   }
 
